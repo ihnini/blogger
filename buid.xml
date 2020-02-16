@@ -1,0 +1,25 @@
+<project default="deploy">
+
+  <basename property="project.name" file="${basedir}"/>
+
+  <target name="clean">
+    <echo message="${project.name}" />
+    <delete includeEmptyDirs="true">
+      <fileset dir="../apache-tomcat-9.0.31/webapps" includes="${project.name}*"/>
+      <dirset dir="../apache-tomcat-9.0.31/webapps" includes="${project.name}*"/>
+      <dirset dir="target"/>
+    </delete>
+  </target>
+
+  <target name="build">
+    <exec dir="." executable="sh">
+      <arg line="-c 'mvn clean install'" />
+    </exec>
+  </target>
+
+  <target name="deploy" depends="clean, build">
+    <copy  todir="../apache-tomcat-9.0.31/webapps/">
+      <fileset dir="target" includes="${project.name}*.war"/>
+    </copy>
+  </target>
+</project>
