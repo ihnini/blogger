@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import com.ibrahni.PostService;
-import com.sun.jersey.api.core.InjectParam;
 
 @Path("/posts")
 @Produces("application/json")
@@ -26,14 +25,16 @@ public class PostsApi {
 
     private static final Logger LOGGER = Logger.getLogger(PostsApi.class.getName());
 
-    @InjectParam
     private PostService postService;
 
-    @InjectParam
     private PostFactory postFactory;
 
+    public PostsApi(PostService postService, PostFactory postFactory) {
+        this.postService = postService;
+        this.postFactory = postFactory;
+    }
+
     @GET
-    @Path("/")
     public Response posts() {
         return Response.ok(postFactory.create(postService.findAll())).build();
     }
